@@ -1,0 +1,175 @@
+ros-humble-clearpath-sensors-description (0.2.9-1bookworm) bookworm; urgency=high
+
+  * Added Zed URDF
+  * Contributors: Luis Camero
+
+ -- Luis Camero <lcamero@clearpathrobotics.com>  Mon, 27 May 2024 16:00:00 -0000
+
+ros-humble-clearpath-sensors-description (0.2.8-1bookworm) bookworm; urgency=high
+
+
+
+ -- Luis Camero <lcamero@clearpathrobotics.com>  Mon, 13 May 2024 16:00:00 -0000
+
+ros-humble-clearpath-sensors-description (0.2.7-1bookworm) bookworm; urgency=high
+
+
+
+ -- Luis Camero <lcamero@clearpathrobotics.com>  Sun, 07 Apr 2024 16:00:00 -0000
+
+ros-humble-clearpath-sensors-description (0.2.6-1bookworm) bookworm; urgency=high
+
+
+
+ -- Luis Camero <lcamero@clearpathrobotics.com>  Wed, 17 Jan 2024 16:00:00 -0000
+
+ros-humble-clearpath-sensors-description (0.2.5-1bookworm) bookworm; urgency=high
+
+
+
+ -- Luis Camero <lcamero@clearpathrobotics.com>  Sun, 14 Jan 2024 16:00:00 -0000
+
+ros-humble-clearpath-sensors-description (0.2.4-1bookworm) bookworm; urgency=high
+
+
+
+ -- Luis Camero <lcamero@clearpathrobotics.com>  Wed, 10 Jan 2024 16:00:00 -0000
+
+ros-humble-clearpath-sensors-description (0.2.3-1bookworm) bookworm; urgency=high
+
+
+
+ -- Luis Camero <lcamero@clearpathrobotics.com>  Sun, 07 Jan 2024 16:00:00 -0000
+
+ros-humble-clearpath-sensors-description (0.2.2-1bookworm) bookworm; urgency=high
+
+
+
+ -- Luis Camero <lcamero@clearpathrobotics.com>  Wed, 03 Jan 2024 16:00:00 -0000
+
+ros-humble-clearpath-sensors-description (0.2.1-1bookworm) bookworm; urgency=high
+
+
+
+ -- Luis Camero <lcamero@clearpathrobotics.com>  Wed, 20 Dec 2023 16:00:00 -0000
+
+ros-humble-clearpath-sensors-description (0.2.0-1bookworm) bookworm; urgency=high
+
+  * Updated material on flir
+  * Adds Blackfly camera to sensor description (#33 <https://github.com/clearpathrobotics/clearpath_common/issues/33>)
+    * Adds Blackfly camera to sensor description
+    ---------
+    Co-authored-by: fazzrazz <mailto:danielduranrojas@gmail.com>
+  * Added  to materials
+  * Contributors: Hilary Luo, Luis Camero
+
+ -- Luis Camero <lcamero@clearpathrobotics.com>  Thu, 07 Dec 2023 16:00:00 -0000
+
+ros-humble-clearpath-sensors-description (0.1.3-1bookworm) bookworm; urgency=high
+
+
+
+ -- Luis Camero <lcamero@clearpathrobotics.com>  Thu, 02 Nov 2023 16:00:00 -0000
+
+ros-humble-clearpath-sensors-description (0.1.2-1bookworm) bookworm; urgency=high
+
+  * Adds Blackfly camera to sensor description (#33 <https://github.com/clearpathrobotics/clearpath_common/issues/33>)
+    * Adds Blackfly camera to sensor description
+    ---------
+    Co-authored-by: fazzrazz <mailto:danielduranrojas@gmail.com>
+  * Contributors: Hilary Luo
+
+ -- Luis Camero <lcamero@clearpathrobotics.com>  Sun, 01 Oct 2023 16:00:00 -0000
+
+ros-humble-clearpath-sensors-description (0.1.1-1bookworm) bookworm; urgency=high
+
+  * Added Ignition frame names to simulate the real robot
+  * Contributors: Hilary Luo
+
+ -- Luis Camero <lcamero@clearpathrobotics.com>  Thu, 24 Aug 2023 16:00:00 -0000
+
+ros-humble-clearpath-sensors-description (0.1.0-1bookworm) bookworm; urgency=high
+
+  * Renamed UST10 to UST
+    Added parameter node list
+  * Added UM6/7
+  * Contributors: Roni Kreinin
+
+ -- Luis Camero <lcamero@clearpathrobotics.com>  Wed, 16 Aug 2023 16:00:00 -0000
+
+ros-humble-clearpath-sensors-description (0.0.9-1bookworm) bookworm; urgency=high
+
+  * Added Garmin 18x, Novatel smart 6 and 7
+  * Contributors: Roni Kreinin
+
+ -- Luis Camero <lcamero@clearpathrobotics.com>  Sun, 30 Jul 2023 16:00:00 -0000
+
+ros-humble-clearpath-sensors-description (0.0.8-1bookworm) bookworm; urgency=high
+
+
+
+ -- Luis Camero <lcamero@clearpathrobotics.com>  Sun, 23 Jul 2023 16:00:00 -0000
+
+ros-humble-clearpath-sensors-description (0.0.7-1bookworm) bookworm; urgency=high
+
+
+
+ -- Luis Camero <lcamero@clearpathrobotics.com>  Tue, 18 Jul 2023 16:00:00 -0000
+
+ros-humble-clearpath-sensors-description (0.0.6-1bookworm) bookworm; urgency=high
+
+
+
+ -- Luis Camero <lcamero@clearpathrobotics.com>  Wed, 12 Jul 2023 16:00:00 -0000
+
+ros-humble-clearpath-sensors-description (0.0.5-1bookworm) bookworm; urgency=high
+
+
+
+ -- Luis Camero <lcamero@clearpathrobotics.com>  Tue, 11 Jul 2023 16:00:00 -0000
+
+ros-humble-clearpath-sensors-description (0.0.4-1bookworm) bookworm; urgency=high
+
+
+
+ -- Luis Camero <lcamero@clearpathrobotics.com>  Thu, 06 Jul 2023 16:00:00 -0000
+
+ros-humble-clearpath-sensors-description (0.0.3-1bookworm) bookworm; urgency=high
+
+
+
+ -- Luis Camero <lcamero@clearpathrobotics.com>  Tue, 04 Jul 2023 16:00:00 -0000
+
+ros-humble-clearpath-sensors-description (0.0.2-1bookworm) bookworm; urgency=high
+
+
+
+ -- Luis Camero <lcamero@clearpathrobotics.com>  Mon, 03 Jul 2023 16:00:00 -0000
+
+ros-humble-clearpath-sensors-description (0.0.1-1bookworm) bookworm; urgency=high
+
+  * Added GPS
+    Added realsense gazebo parameters
+  * Added gazebo IMU plugin
+  * use_sim_time support
+    Added lidar gazebo plugins
+  * Sim fixes
+  * Bishop sensors/mounts
+  * Added microstrain
+  * Added velodyne
+  * Added realsense description
+  * Updated sensor naming
+  * Sensor descriptions
+  * Standard urdf and yaml file name and path
+    Fixed spacing in urdfs
+  * Description classes
+  * PACS mounts
+    Common PACS Riser
+    Hokuyo and novatel description fixes
+  * [clearpath_sensors_description] Moved Novatel and Hokuyo into sensors from J100.
+  * Added clearpath_sensors_description.
+  * Contributors: Roni Kreinin, Tony Baltovski
+
+ -- Luis Camero <lcamero@clearpathrobotics.com>  Tue, 20 Jun 2023 16:00:00 -0000
+
+
