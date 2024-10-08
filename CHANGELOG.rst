@@ -2,6 +2,14 @@
 Changelog for package clearpath_platform_description
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+0.3.3 (2024-10-04)
+------------------
+
+0.3.2 (2024-09-29)
+------------------
+* Fix outstanding merge conflict
+* Contributors: Luis Camero
+
 0.3.1 (2024-09-23)
 ------------------
 
