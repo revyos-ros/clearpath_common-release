@@ -1,3 +1,36 @@
+## clearpath_common (humble) - 1.0.0-1
+
+The packages in the `clearpath_common` repository were released into the `humble` distro by running `/home/z572/gits/revyos-ros/venv2/bin/bloom-release -r humble clearpath_common --override-release-repository-push-url git@github.com:revyos-ros/clearpath_common-release.git` on `Thu, 12 Dec 2024 13:10:08 -0000`
+
+These packages were released:
+- `clearpath_common`
+- `clearpath_control`
+- `clearpath_customization`
+- `clearpath_description`
+- `clearpath_generator_common`
+- `clearpath_manipulators`
+- `clearpath_manipulators_description`
+- `clearpath_mounts_description`
+- `clearpath_platform_description`
+- `clearpath_sensors_description`
+
+Version of package(s) in repository `clearpath_common`:
+
+- upstream repository: https://github.com/clearpathrobotics/clearpath_common.git
+- release repository: https://github.com/revyos-ros/clearpath_common-release.git
+- rosdistro version: `1.0.0-1`
+- old version: `0.3.4-1`
+- new version: `1.0.0-1`
+
+Versions of tools used:
+
+- bloom version: `0.12.0`
+- catkin_pkg version: `1.0.0`
+- rosdep version: `0.22.2`
+- rosdistro version: `0.9.0`
+- vcstools version: `0.1.42`
+
+
 ## clearpath_common (humble) - 0.3.4-1
 
 The packages in the `clearpath_common` repository were released into the `humble` distro by running `/home/z572/gits/revyos-ros/venv2/bin/bloom-release -r humble clearpath_common --override-release-repository-push-url git@github.com:revyos-ros/clearpath_common-release.git` on `Sat, 12 Oct 2024 04:11:30 -0000`
