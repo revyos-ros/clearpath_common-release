@@ -32,10 +32,16 @@
 # modification, is not permitted without the express permission
 # of Clearpath Robotics.
 from clearpath_config.common.types.platform import Platform
+from clearpath_config.platform.can import (
+    PhysicalCANAdapter,
+    SerialCANAdapter,
+    VirtualCANAdapter,
+)
 from clearpath_generator_common.bash.writer import BashWriter
 from clearpath_generator_common.common import BaseGenerator, BashFile
 
 PLATFORMS = [
+    Platform.A300,
     Platform.DD100,
     Platform.DD150,
     Platform.DO100,
@@ -57,20 +63,32 @@ class VirtualCANGenerator(BaseGenerator):
         vcan_start = BashFile(filename='vcan-start', path=self.setup_path)
         bash_writer = BashWriter(vcan_start)
 
-        # Check platform
-        if self.clearpath_config.get_platform_model() in PLATFORMS:
-            port = 11412
-            serial = '/dev/ttycan0'
-            can = 'vcan0'
-            baud = 's8'
-            bash_writer.write(
-                f'/bin/sh -e /usr/sbin/clearpath-vcan-bridge '
-                f'-p {port} '
-                f'-d {serial} '
-                f'-v {can} '
-                f'-b {baud}'
-            )
-        else:
+        for adapter in self.clearpath_config.platform.can_adapters.get_all():
+            if adapter.TYPE == VirtualCANAdapter.TYPE:
+                bash_writer.write(
+                    f'/bin/bash -e /usr/sbin/clearpath-vcan-bridge '
+                    f'-t {adapter.TYPE} '
+                    f'-p {adapter.port} '
+                    f'-s {adapter.serial_dev} '
+                    f'-c {adapter.can_dev} '
+                    f'-b {adapter.baud}'
+                )
+            if adapter.TYPE == SerialCANAdapter.TYPE:
+                bash_writer.write(
+                    f'/bin/bash -e /usr/sbin/clearpath-vcan-bridge '
+                    f'-t {adapter.TYPE} '
+                    f'-s {adapter.serial_dev} '
+                    f'-c {adapter.can_dev} '
+                    f'-b {adapter.baud}'
+                )
+            if adapter.TYPE == PhysicalCANAdapter.TYPE:
+                bash_writer.write(
+                    f'/bin/bash -e /usr/sbin/clearpath-vcan-bridge '
+                    f'-t {adapter.TYPE} '
+                    f'-c {adapter.can_dev} '
+                    f'-b {adapter.baud}'
+                )
+        if not self.clearpath_config.platform.can_adapters.get_all():
             bash_writer.add_echo(
                 'No vcan bridge required.' +
                 'If this was launched as a service then the service will now end.'

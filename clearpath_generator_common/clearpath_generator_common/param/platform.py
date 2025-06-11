@@ -31,23 +31,40 @@
 # of Clearpath Robotics.
 import os
 
+from apt import Cache
+
 from clearpath_config.clearpath_config import ClearpathConfig
 from clearpath_config.common.types.platform import Platform
 from clearpath_config.common.utils.dictionary import merge_dict, replace_dict_items
+from clearpath_config.sensors.types.cameras import BaseCamera, IntelRealsense
+from clearpath_config.sensors.types.gps import BaseGPS
+from clearpath_config.sensors.types.imu import BaseIMU, PhidgetsSpatial
+from clearpath_config.sensors.types.lidars_2d import BaseLidar2D
+from clearpath_config.sensors.types.lidars_3d import BaseLidar3D
+from clearpath_config.sensors.types.sensor import BaseSensor
 from clearpath_generator_common.common import Package, ParamFile
 from clearpath_generator_common.param.writer import ParamWriter
+from clearpath_generator_common.ros import ROS_DISTRO
 
 
 class PlatformParam():
     CONTROL = 'control'
+    DIAGNOSTIC_AGGREGATOR = 'diagnostic_aggregator'
+    DIAGNOSTIC_UPDATER = 'diagnostic_updater'
+    FOXGLOVE_BRIDGE = 'foxglove_bridge'
     IMU_FILTER = 'imu_filter'
     LOCALIZATION = 'localization'
     TELEOP_INTERACTIVE_MARKERS = 'teleop_interactive_markers'
     TELEOP_JOY = 'teleop_joy'
     TWIST_MUX = 'twist_mux'
 
+    NOT_APPLICABLE = 'not_applicable'
+
     PARAMETERS = [
       CONTROL,
+      DIAGNOSTIC_AGGREGATOR,
+      DIAGNOSTIC_UPDATER,
+      FOXGLOVE_BRIDGE,
       IMU_FILTER,
       LOCALIZATION,
       TELEOP_INTERACTIVE_MARKERS,
@@ -57,8 +74,7 @@ class PlatformParam():
 
     class BaseParam():
         CLEARPATH_CONTROL = 'clearpath_control'
-        CLEARPATH_HARDWARE_INTERFACES = 'clearpath_hardware_interfaces'
-        CLEARPATH_SENSORS = 'clearpath_sensors'
+        CLEARPATH_DIAGNOSTICS = 'clearpath_diagnostics'
 
         def __init__(self,
                      parameter: str,
@@ -71,10 +87,6 @@ class PlatformParam():
             self.param_path = param_path
 
             # Clearpath Platform Package
-            self.clearpath_sensors_package = Package(
-                self. CLEARPATH_SENSORS)
-            self.clearpath_hardware_interfaces_package = Package(
-                self.CLEARPATH_HARDWARE_INTERFACES)
             self.clearpath_control_package = Package(self.CLEARPATH_CONTROL)
 
             # Default parameter file
@@ -192,7 +204,242 @@ class PlatformParam():
                      clearpath_config: ClearpathConfig,
                      param_path: str) -> None:
             super().__init__(parameter, clearpath_config, param_path)
-            self.default_parameter_file_package = self.clearpath_sensors_package
+            self.default_parameter_file_package = self.clearpath_control_package
+            self.default_parameter_file_path = 'config'
+
+    class DiagnosticsAggregatorParam(BaseParam):
+        """Parameter file that decides the aggregation of the diagnostics data for display."""
+
+        DIAGNOSTIC_AGGREGATOR_NODE = 'diagnostic_aggregator'
+
+        def __init__(self,
+                     parameter: str,
+                     clearpath_config: ClearpathConfig,
+                     param_path: str) -> None:
+            super().__init__(parameter, clearpath_config, param_path)
+            self.default_parameter_file_package = Package(self.CLEARPATH_DIAGNOSTICS)
+            self.default_parameter_file_path = 'config'
+
+        def generate_parameters(self, use_sim_time: bool = False) -> None:
+            super().generate_parameters(use_sim_time)
+
+            # Add MCU diagnostic category for all platforms except A200
+            if self.clearpath_config.get_platform_model() != Platform.A200:
+                self.param_file.update({
+                    self.DIAGNOSTIC_AGGREGATOR_NODE: {
+                        'platform': {
+                            'analyzers': {
+                                'mcu': {
+                                    'type': 'diagnostic_aggregator/GenericAnalyzer',
+                                    'path': 'MCU',
+                                    'expected': [
+                                        'clearpath_diagnostic_updater: MCU Firmware Version',
+                                        'clearpath_diagnostic_updater: MCU Status'
+                                    ],
+                                    'contains': ['MCU']
+                                }
+                            }
+                        }
+                    }
+                })
+
+            # Add cooling for A300 only for now
+            if self.clearpath_config.get_platform_model() == Platform.A300:
+                self.param_file.update({
+                    self.DIAGNOSTIC_AGGREGATOR_NODE: {
+                        'platform': {
+                            'analyzers': {
+                                'cooling': {
+                                    'type': 'diagnostic_aggregator/GenericAnalyzer',
+                                    'path': 'Cooling',
+                                    'contains': ['Fan', 'Thermal']
+                                }
+                            }
+                        }
+                    }
+                })
+
+            if self.clearpath_config.platform.enable_ekf:
+                self.param_file.update({
+                    self.DIAGNOSTIC_AGGREGATOR_NODE: {
+                        'platform': {
+                            'analyzers': {
+                                'odometry': {
+                                    'expected': [
+                                        'ekf_node: Filter diagnostic updater',
+                                        'ekf_node: odometry/filtered topic status',
+                                    ]
+                                }
+                            }
+                        }
+                    }
+                })
+
+            sensor_analyzers = {}
+
+            # List all topics to be monitored from each launched sensor
+            for sensor in self.clearpath_config.sensors.get_all_sensors():
+
+                if not sensor.launch_enabled:
+                    continue
+
+                match sensor:
+                    case BaseCamera():
+                        sensor_analyzers['cameras'] = {
+                            'type': 'diagnostic_aggregator/GenericAnalyzer',
+                            'path': 'Cameras',
+                            'contains': ['camera']
+                        }
+                    case BaseLidar2D():
+                        sensor_analyzers['lidar2d'] = {
+                            'type': 'diagnostic_aggregator/GenericAnalyzer',
+                            'path': 'Lidar2D',
+                            'contains': ['lidar2d']
+                        }
+                    case BaseLidar3D():
+                        sensor_analyzers['lidar3d'] = {
+                            'type': 'diagnostic_aggregator/GenericAnalyzer',
+                            'path': 'Lidar3D',
+                            'contains': ['lidar3d']
+                        }
+                    case BaseIMU():
+                        sensor_analyzers['imu'] = {
+                            'type': 'diagnostic_aggregator/GenericAnalyzer',
+                            'path': 'IMU',
+                            'contains': ['imu']
+                        }
+                    case BaseGPS():
+                        sensor_analyzers['gps'] = {
+                            'type': 'diagnostic_aggregator/GenericAnalyzer',
+                            'path': 'GPS',
+                            'contains': ['gps']
+                        }
+
+            # Update aggregator sensor sections based on the robot.yaml
+            if sensor_analyzers:
+                self.param_file.update({
+                    self.DIAGNOSTIC_AGGREGATOR_NODE: {
+                        'sensors': {
+                            'type': 'diagnostic_aggregator/AnalyzerGroup',
+                            'path': 'Sensors',
+                            'analyzers': sensor_analyzers
+                        }
+                    }
+                })
+
+    class DiagnosticsUpdaterParam(BaseParam):
+        """Parameter file for Clearpath Diagnostics indicating which topics to monitor."""
+
+        DIAGNOSTIC_UPDATER_NODE = 'clearpath_diagnostic_updater'
+
+        def __init__(self,
+                     parameter: str,
+                     clearpath_config: ClearpathConfig,
+                     param_path: str) -> None:
+            super().__init__(parameter, clearpath_config, param_path)
+            self.default_parameter_file_package = Package(self.CLEARPATH_DIAGNOSTICS)
+            self.default_parameter_file_path = 'config'
+            self.diag_dict = {}
+
+        def generate_parameters(self, use_sim_time: bool = False) -> None:
+            super().generate_parameters(use_sim_time)
+
+            # Update parameters based on the robot.yaml
+            platform_model = self.clearpath_config.get_platform_model()
+            self.param_file.update({
+                self.DIAGNOSTIC_UPDATER_NODE: {
+                    'serial_number': self.clearpath_config.get_serial_number(),
+                    'platform_model': platform_model
+                }
+            })
+
+            if use_sim_time:
+                latest_apt_firmware_version = 'simulated'
+                installed_apt_firmware_version = 'simulated'
+            elif platform_model == Platform.A200:
+                latest_apt_firmware_version = PlatformParam.NOT_APPLICABLE
+                installed_apt_firmware_version = PlatformParam.NOT_APPLICABLE
+            else:
+                # Check latest firmware version available and save it in the config
+                cache = Cache()
+                latest_apt_firmware_version = 'not_found'
+                installed_apt_firmware_version = 'none'
+                try:
+                    pkg = cache[f'ros-{ROS_DISTRO}-clearpath-firmware']
+                    latest_apt_firmware_version = pkg.versions[0].version.split('-')[0]
+                    if (pkg.is_installed):
+                        installed_apt_firmware_version = pkg.installed.version.split('-')[0]
+                except KeyError:
+                    print(f'\033[93mWarning: ros-{ROS_DISTRO}-clearpath-firmware'
+                          ' package not found\033[0m')
+
+            self.param_file.update({
+                self.DIAGNOSTIC_UPDATER_NODE: {
+                    'ros_distro': ROS_DISTRO,
+                    'latest_apt_firmware_version': latest_apt_firmware_version,
+                    'installed_apt_firmware_version': installed_apt_firmware_version
+                }
+            })
+
+            # List all topics to be monitored from each launched sensor
+            for sensor in self.clearpath_config.sensors.get_all_sensors():
+
+                if not sensor.launch_enabled:
+                    continue
+
+                match sensor:
+                    case IntelRealsense():
+                        if sensor.color_enabled:
+                            self.add_topic(sensor, sensor.TOPICS.COLOR_IMAGE)
+                        if sensor.depth_enabled:
+                            self.add_topic(sensor, sensor.TOPICS.DEPTH_IMAGE)
+                        if sensor.pointcloud_enabled:
+                            self.add_topic(sensor, sensor.TOPICS.POINTCLOUD)
+
+                    case BaseCamera():
+                        self.add_topic(sensor, sensor.TOPICS.COLOR_IMAGE)
+
+                    case BaseLidar2D():
+                        self.add_topic(sensor, sensor.TOPICS.SCAN)
+
+                    case BaseLidar3D():
+                        self.add_topic(sensor, sensor.TOPICS.SCAN)
+                        self.add_topic(sensor, sensor.TOPICS.POINTS)
+
+                    case PhidgetsSpatial():
+                        self.add_topic(sensor, sensor.TOPICS.DATA),
+                        self.add_topic(sensor, sensor.TOPICS.RAW_DATA),
+                        self.add_topic(sensor, sensor.TOPICS.MAG),
+
+                    case BaseIMU():
+                        self.add_topic(sensor, sensor.TOPICS.DATA)
+                        self.add_topic(sensor, sensor.TOPICS.MAG)
+
+                    case BaseGPS():
+                        self.add_topic(sensor, sensor.TOPICS.FIX)
+
+            # Output the list of topics into the parameter file
+            self.param_file.update({self.DIAGNOSTIC_UPDATER_NODE: {'topics': self.diag_dict}})
+
+        def add_topic(self, sensor: BaseSensor, topic_key: str) -> None:
+            """
+            Add a sensor topic to the dictionary using the topic key string.
+
+            :param sensor: The sensor object from which the topic info will be gotten
+            :param topic_key: The key used to identify the topic to be monitored
+            """
+            self.diag_dict[sensor.get_topic_name(topic_key, local=True)] = {
+                'type': sensor.get_topic_type(topic_key),
+                'rate': float(sensor.get_topic_rate(topic_key))
+            }
+
+    class FoxgloveBridgeParam(BaseParam):
+        def __init__(self,
+                     parameter: str,
+                     clearpath_config: ClearpathConfig,
+                     param_path: str) -> None:
+            super().__init__(parameter, clearpath_config, param_path)
+            self.default_parameter_file_package = Package(self.CLEARPATH_DIAGNOSTICS)
             self.default_parameter_file_path = 'config'
 
     class LocalizationParam(BaseParam):
@@ -210,7 +457,10 @@ class PlatformParam():
             if extras:
                 self.param_file.update({self.EKF_NODE: extras})
             else:
-                if self.platform != Platform.A200:
+                # Count the IMU index individually so we can continue counting for GPS
+                imu_idx = 0
+
+                if Platform.INDEX[self.platform].imu > 0:
                     imu0_parameters = {
                         'imu0': 'sensors/imu_0/data',
                         'imu0_config': self.imu_config,
@@ -220,15 +470,12 @@ class PlatformParam():
                         'imu0_remove_gravitational_acceleration': True
                     }
                     self.param_file.update({self.EKF_NODE: imu0_parameters})
-
-                # Count the IMU index individually so we can continue counting for GPS
-                imu_idx = 0
+                    imu_idx += 1
 
                 # Add all additional IMU's
                 imus = self.clearpath_config.sensors.get_all_imu()
                 for imu in imus:
                     if imu.launch_enabled:
-                        imu_idx += 1
                         imu_name = f'imu{imu_idx}'
                         imu_parameters = {
                             imu_name: f'sensors/{imu.name}/data',
@@ -238,6 +485,7 @@ class PlatformParam():
                             f'{imu_name}_remove_gravitational_acceleration': True
                         }
                         self.param_file.update({self.EKF_NODE: imu_parameters})
+                        imu_idx += 1
 
                 # Add all GPS sensors that have IMUs
                 gpss = self.clearpath_config.sensors.get_all_gps()
@@ -273,6 +521,9 @@ class PlatformParam():
 
     PARAMETER = {
         IMU_FILTER: ImuFilterParam,
+        DIAGNOSTIC_AGGREGATOR: DiagnosticsAggregatorParam,
+        DIAGNOSTIC_UPDATER: DiagnosticsUpdaterParam,
+        FOXGLOVE_BRIDGE: FoxgloveBridgeParam,
         LOCALIZATION: LocalizationParam,
         TELEOP_JOY: TeleopJoyParam,
         TWIST_MUX: TwistMuxParam,

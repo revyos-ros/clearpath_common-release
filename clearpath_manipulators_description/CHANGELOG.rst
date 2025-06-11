@@ -2,20 +2,60 @@
 Changelog for package clearpath_manipulators_description
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-1.1.1 (2025-01-16)
+2.5.0 (2025-05-29)
 ------------------
 
-1.1.0 (2025-01-15)
+2.3.2 (2025-04-30)
 ------------------
-* Ewellix Lift (`#136 <https://github.com/clearpathrobotics/clearpath_common/issues/136>`_)
+
+2.3.1 (2025-04-16)
+------------------
+
+2.3.0 (2025-04-11)
+------------------
+* Feature: Manipulator Samples and Poses (`#163 <https://github.com/clearpathrobotics/clearpath_common/issues/163>`_) (`#188 <https://github.com/clearpathrobotics/clearpath_common/issues/188>`_)
+* Contributors: Luis Camero
+
+2.2.2 (2025-04-09)
+------------------
+* Fast Forward Fix: Isolate UR Client Library in URDF (`#195 <https://github.com/clearpathrobotics/clearpath_common/issues/195>`_)
+  * Fix: Isolate Universal Robots driver and client library dependencies (`#164 <https://github.com/clearpathrobotics/clearpath_common/issues/164>`_)
+  * Update fake to mock
+* Contributors: Luis Camero
+
+2.2.1 (2025-04-07)
+------------------
+
+2.2.0 (2025-03-11)
+------------------
+
+2.1.0 (2025-01-31)
+------------------
+* Ewellix Lift (`#136 <https://github.com/clearpathrobotics/clearpath_common/issues/136>`_) (`#153 <https://github.com/clearpathrobotics/clearpath_common/issues/153>`_)
   Ewellix Lift
-  -  Remove upper_joint
-  - Add moveit jpc
-  - Add control for joint position controller
-  - Add hardware parameters
+  - Add lift description
   - Add lifts to generators
-  - Initial add of Ewellix lift description files
-* Contributors: luis-camero
+* Updated URDF
+* Contributors: Luis Camero
+
+2.0.3 (2025-01-21)
+------------------
+
+2.0.2 (2025-01-20)
+------------------
+
+2.0.1 (2025-01-17)
+------------------
+
+2.0.0 (2025-01-16)
+------------------
+* Add PTZ sim support (`#125 <https://github.com/clearpathrobotics/clearpath_common/issues/125>`_)
+  * Now that axis_camera is released via OSRF, depend on the official package, remove duplicate meshes
+  * Rename Gazebo plugins for Jazzy compatibility
+  * Modify Axis camera URDFs to using the axis_camera meshes. This lets us control the gazebo topics. Fix the GZ topic names. Camera data is now visible in the simulation
+  * Add joint controllers for the pan & tilt actuators. This provides velocity control over the simulated camera
+* Rename ign\_ -> gz\_ for gazebo dependencies, comment-out missing jazzy dependencies (for now)
+* Contributors: Chris Iverach-Brereton, Tony Baltovski, luis-camero
 
 1.0.0 (2024-11-25)
 ------------------
