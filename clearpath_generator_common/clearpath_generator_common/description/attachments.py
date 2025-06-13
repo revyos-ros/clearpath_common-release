@@ -124,7 +124,6 @@ class AttachmentsDescription():
         A200Attachment.BUMPER: BumperDescription,
         A200Attachment.TOP_PLATE: BaseDescription,
         A200Attachment.SENSOR_ARCH: BaseDescription,
-        A200Attachment.OBSERVER_BACKPACK: BaseDescription,
         # J100
         J100Attachment.FENDER: BaseDescription,
         J100Attachment.TOP_PLATE: BaseDescription,

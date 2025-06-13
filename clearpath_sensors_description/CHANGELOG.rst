@@ -2,72 +2,28 @@
 Changelog for package clearpath_sensors_description
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-2.5.0 (2025-05-29)
+1.3.2 (2025-04-15)
 ------------------
 
-2.3.2 (2025-04-30)
+1.3.1 (2025-04-15)
 ------------------
 
-2.3.1 (2025-04-16)
+1.3.0 (2025-04-15)
 ------------------
 
-2.3.0 (2025-04-11)
+1.2.0 (2025-03-13)
 ------------------
-* Added Wiferion Charger (`#197 <https://github.com/clearpathrobotics/clearpath_common/issues/197>`_)
-* Added support for INS sensors + Fixposition XVN (`#184 <https://github.com/clearpathrobotics/clearpath_common/issues/184>`_)
-* Contributors: Chris Iverach-Brereton, Luis Camero
-
-2.2.2 (2025-04-09)
-------------------
-
-2.2.1 (2025-04-07)
-------------------
-
-2.2.0 (2025-03-11)
-------------------
-* Feature Jazzy Ouster (`#170 <https://github.com/clearpathrobotics/clearpath_common/issues/170>`_)
+* Feature Humble Ouster (`#161 <https://github.com/clearpathrobotics/clearpath_common/issues/161>`_)
   * Add OusteOS1 description
   * Custom OusterOS1 generator
   * Ouster use custom description generator
-  * Use appropriate generator for Ouster
-* Add D455, D456 support (`#176 <https://github.com/clearpathrobotics/clearpath_common/issues/176>`_)
-  * Add URDFs for all supported RealSense cameras
-  * Pass the `device_type` as the model parameter to the master URDF, move specific types into a sub-directory and include them as necessary
-* Add support for OAK-D Pro W PoE (`#174 <https://github.com/clearpathrobotics/clearpath_common/issues/174>`_)
-  * Add the model for the OAK-D Pro W; it's identical to the OAK-D Pro. Add model type support to the OAK-D description
-* Add URDF, STL files for the Seyond Robin W lidar (`#169 <https://github.com/clearpathrobotics/clearpath_common/issues/169>`_)
-  * Add URDF, STL files for the Seyond Robin W lidar
-* Contributors: Chris Iverach-Brereton, luis-camero
+* Contributors: Luis Camero
 
-2.1.0 (2025-01-31)
+1.1.1 (2025-01-16)
 ------------------
 
-2.0.3 (2025-01-21)
+1.1.0 (2025-01-15)
 ------------------
-
-2.0.2 (2025-01-20)
-------------------
-
-2.0.1 (2025-01-17)
-------------------
-
-2.0.0 (2025-01-16)
-------------------
-* Fix test errors (`#132 <https://github.com/clearpathrobotics/clearpath_common/issues/132>`_)
-  * Add continue clause to the unsupported device/platform exceptions so we don't try any further tests with them
-  * Fix URDF parameters so the source CI passes with the axis cameras
-* Add plugins to get the PTZ joint states out of gazebo and into ROS (`#126 <https://github.com/clearpathrobotics/clearpath_common/issues/126>`_)
-* Add PTZ sim support (`#125 <https://github.com/clearpathrobotics/clearpath_common/issues/125>`_)
-  * Now that axis_camera is released via OSRF, depend on the official package, remove duplicate meshes
-  * Rename Gazebo plugins for Jazzy compatibility
-  * Modify Axis camera URDFs to using the axis_camera meshes. This lets us control the gazebo topics. Fix the GZ topic names. Camera data is now visible in the simulation
-  * Add joint controllers for the pan & tilt actuators. This provides velocity control over the simulated camera
-* Update simulation support for Jazzy (`#117 <https://github.com/clearpathrobotics/clearpath_common/issues/117>`_)
-  * Rename gazebo plugins to use new gz nomenclature instead of ign/ignition. Use stamped velocity messages.
-  * Restructure the twist_mux yaml file to be more legible, remove the parameters that are overwritten by the launch file anyway
-  * Put use_stamped back just for the sake of being explicit. Add use_stamped directly to the launch file
-  * Fix the tests to catch unsupported platforms & accessories
-* Contributors: Chris Iverach-Brereton, Luis Camero, Tony Baltovski, luis-camero
 
 1.0.0 (2024-11-25)
 ------------------

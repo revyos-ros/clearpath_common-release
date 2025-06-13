@@ -131,17 +131,13 @@ class LaunchFile():
                  name: str,
                  path: str = 'launch',
                  package: Package = None,
-                 args: List[tuple] = None,
-                 filename: str = None,
+                 args: List[tuple] = None
                  ) -> None:
         self.package = package
         self.path = path
         self.name = 'launch_' + name
         self.declaration = 'launch_file_{0}'.format(name)
-        if filename:
-            self.file = '{0}.launch.py'.format(filename)
-        else:
-            self.file = '{0}.launch.py'.format(name)
+        self.file = '{0}.launch.py'.format(name)
         self.args = args
 
     def get_full_path(self):
@@ -276,7 +272,6 @@ class BashFile():
 class BaseGenerator():
     SENSORS_PATH = 'sensors/'
     PLATFORM_PATH = 'platform/'
-    PLATFORM_EXTRAS_PATH = 'platform-extras/'
     MANIPULATORS_PATH = 'manipulators/'
     LAUNCH_PATH = 'launch/'
     PARAM_PATH = 'config/'
@@ -296,8 +291,6 @@ class BaseGenerator():
             self.setup_path, self.PLATFORM_PATH, self.PARAM_PATH)
         self.platform_launch_path = os.path.join(
             self.setup_path, self.PLATFORM_PATH, self.LAUNCH_PATH)
-        self.platform_extras_launch_path = os.path.join(
-            self.setup_path, self.PLATFORM_EXTRAS_PATH, self.LAUNCH_PATH)
         self.manipulators_params_path = os.path.join(
             self.setup_path, self.MANIPULATORS_PATH, self.PARAM_PATH)
         self.manipulators_launch_path = os.path.join(

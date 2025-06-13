@@ -2,47 +2,26 @@
 Changelog for package clearpath_manipulators
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-2.5.0 (2025-05-29)
+1.3.2 (2025-04-15)
 ------------------
 
-2.3.2 (2025-04-30)
+1.3.1 (2025-04-15)
 ------------------
-* Add srdf plugins to package xml (`#204 <https://github.com/clearpathrobotics/clearpath_common/issues/204>`_)
+
+1.3.0 (2025-04-15)
+------------------
+* Feature: Add delay to manipulator controller (`#182 <https://github.com/clearpathrobotics/clearpath_common/issues/182>`_)
 * Contributors: Luis Camero
 
-2.3.1 (2025-04-16)
+1.2.0 (2025-03-13)
+------------------
+* Feature: MoveIt Parameters and Enable (`#166 <https://github.com/clearpathrobotics/clearpath_common/issues/166>`_)
+* Contributors: luis-camero
+
+1.1.1 (2025-01-16)
 ------------------
 
-2.3.0 (2025-04-11)
-------------------
-* Added delay to manipulator controller (`#191 <https://github.com/clearpathrobotics/clearpath_common/issues/191>`_)
-* Added MoveIt Parameters and Enable (`#166 <https://github.com/clearpathrobotics/clearpath_common/issues/166>`_) (`#189 <https://github.com/clearpathrobotics/clearpath_common/issues/189>`_)
-* Contributors: Luis Camero
-
-2.2.2 (2025-04-09)
-------------------
-
-2.2.1 (2025-04-07)
-------------------
-* Fix: Rename ompl to _ompl and update to match Jazzy (`#186 <https://github.com/clearpathrobotics/clearpath_common/issues/186>`_)
-* Contributors: Luis Camero
-
-2.2.0 (2025-03-11)
-------------------
-
-2.1.0 (2025-01-31)
-------------------
-
-2.0.3 (2025-01-21)
-------------------
-
-2.0.2 (2025-01-20)
-------------------
-
-2.0.1 (2025-01-17)
-------------------
-
-2.0.0 (2025-01-16)
+1.1.0 (2025-01-15)
 ------------------
 
 1.0.0 (2024-11-25)
