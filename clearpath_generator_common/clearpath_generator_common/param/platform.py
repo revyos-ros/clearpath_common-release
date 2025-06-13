@@ -34,6 +34,8 @@ import os
 from clearpath_config.clearpath_config import ClearpathConfig
 from clearpath_config.common.types.platform import Platform
 from clearpath_config.common.utils.dictionary import merge_dict, replace_dict_items
+from clearpath_config.manipulators.types.arms import Franka
+from clearpath_config.manipulators.types.grippers import FrankaGripper
 from clearpath_generator_common.common import Package, ParamFile
 from clearpath_generator_common.param.writer import ParamWriter
 
@@ -57,8 +59,6 @@ class PlatformParam():
 
     class BaseParam():
         CLEARPATH_CONTROL = 'clearpath_control'
-        CLEARPATH_HARDWARE_INTERFACES = 'clearpath_hardware_interfaces'
-        CLEARPATH_SENSORS = 'clearpath_sensors'
 
         def __init__(self,
                      parameter: str,
@@ -71,10 +71,6 @@ class PlatformParam():
             self.param_path = param_path
 
             # Clearpath Platform Package
-            self.clearpath_sensors_package = Package(
-                self. CLEARPATH_SENSORS)
-            self.clearpath_hardware_interfaces_package = Package(
-                self.CLEARPATH_HARDWARE_INTERFACES)
             self.clearpath_control_package = Package(self.CLEARPATH_CONTROL)
 
             # Default parameter file
@@ -121,9 +117,20 @@ class PlatformParam():
                         parameters={}
                     )
                     arm_param_file.read()
+                    # Franka Exception. Add Arm ID.
+                    if arm.MANIPULATOR_MODEL == Franka.MANIPULATOR_MODEL:
+                        updated_parameters = replace_dict_items(
+                            arm_param_file.parameters,
+                            {r'${name}': f'{arm.name}_{arm.arm_id}'}
+                        )
+                    else:
+                        updated_parameters = replace_dict_items(
+                            arm_param_file.parameters,
+                            {r'${name}': arm.name}
+                        )
                     updated_parameters = replace_dict_items(
-                        arm_param_file.parameters,
-                        {r'${name}': arm.name}
+                        updated_parameters,
+                        {r'${controller_name}': arm.name}
                     )
                     self.param_file.parameters = merge_dict(
                         self.param_file.parameters, updated_parameters)
@@ -144,9 +151,20 @@ class PlatformParam():
                         parameters={}
                     )
                     gripper_param_file.read()
+                    # Franka Exception. Add Arm ID.
+                    if gripper.MANIPULATOR_MODEL == FrankaGripper.MANIPULATOR_MODEL:
+                        updated_parameters = replace_dict_items(
+                            gripper_param_file.parameters,
+                            {r'${name}': f'{gripper.name}_{gripper.arm_id}'}
+                        )
+                    else:
+                        updated_parameters = replace_dict_items(
+                            gripper_param_file.parameters,
+                            {r'${name}': gripper.name}
+                        )
                     updated_parameters = replace_dict_items(
-                        gripper_param_file.parameters,
-                        {r'${name}': gripper.name}
+                        updated_parameters,
+                        {r'${controller_name}': gripper.name}
                     )
                     self.param_file.parameters = merge_dict(
                         self.param_file.parameters, updated_parameters)
@@ -192,7 +210,7 @@ class PlatformParam():
                      clearpath_config: ClearpathConfig,
                      param_path: str) -> None:
             super().__init__(parameter, clearpath_config, param_path)
-            self.default_parameter_file_package = self.clearpath_sensors_package
+            self.default_parameter_file_package = self.clearpath_control_package
             self.default_parameter_file_path = 'config'
 
     class LocalizationParam(BaseParam):
@@ -201,7 +219,7 @@ class PlatformParam():
                       False, False, False,
                       False, False, False,
                       False, False, True,
-                      True, False, False]
+                      False, False, False]
 
         def generate_parameters(self, use_sim_time: bool = False) -> None:
             super().generate_parameters(use_sim_time)
